@@ -17,6 +17,7 @@ class SokobanEnv(gym.Env):
                  max_steps=120,
                  num_boxes=4,
                  num_gen_steps=None,
+                 achievement_reward=False,
                  reset=True):
 
         # General Configuration
@@ -35,6 +36,8 @@ class SokobanEnv(gym.Env):
         self.reward_box_on_target = 1
         self.reward_finished = 10
         self.reward_last = 0
+        self.maximum_finished = 0
+        self.achievement_reward = achievement_reward
 
         # Other Settings
         self.viewer = None
@@ -181,6 +184,13 @@ class SokobanEnv(gym.Env):
         game_won = self._check_if_all_boxes_on_target()        
         if game_won:
             self.reward_last += self.reward_finished
+
+        if self.achievement_reward:
+            if current_boxes_on_target > self.maximum_finished:
+                self.reward_last = 1
+            else:
+                self.reward_last = 0
+        self.maximum_finished = max(current_boxes_on_target, self.maximum_finished)
         
         self.boxes_on_target = current_boxes_on_target
 
@@ -215,6 +225,7 @@ class SokobanEnv(gym.Env):
         self.num_env_steps = 0
         self.reward_last = 0
         self.boxes_on_target = 0
+        self.maximum_finished = 0
 
         starting_observation = self.render(render_mode)
         return starting_observation

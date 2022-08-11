@@ -2,6 +2,13 @@ import numpy as np
 import pkg_resources
 import imageio
 
+box = None
+box_on_target = None
+box_target = None
+floor = None
+player = None
+player_on_target = None
+wall = None
 
 def room_to_rgb(room, room_structure=None):
     """
@@ -10,6 +17,9 @@ def room_to_rgb(room, room_structure=None):
     :param room_structure:
     :return:
     """
+
+    global box, box_on_target, box_target, floor, player, player_on_target, wall
+
     resource_package = __name__
 
     room = np.array(room)
@@ -17,29 +27,30 @@ def room_to_rgb(room, room_structure=None):
         # Change the ID of a player on a target
         room[(room == 5) & (room_structure == 2)] = 6
 
-    # Load images, representing the corresponding situation
-    box_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box.png')))
-    box = imageio.imread(box_filename)
+    if box is None:
+        # Load images, representing the corresponding situation
+        box_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box.png')))
+        box = imageio.imread(box_filename)
 
-    box_on_target_filename = pkg_resources.resource_filename(resource_package,
-                                                             '/'.join(('surface', 'box_on_target.png')))
-    box_on_target = imageio.imread(box_on_target_filename)
+        box_on_target_filename = pkg_resources.resource_filename(resource_package,
+                                                                '/'.join(('surface', 'box_on_target.png')))
+        box_on_target = imageio.imread(box_on_target_filename)
 
-    box_target_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box_target.png')))
-    box_target = imageio.imread(box_target_filename)
+        box_target_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'box_target.png')))
+        box_target = imageio.imread(box_target_filename)
 
-    floor_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'floor.png')))
-    floor = imageio.imread(floor_filename)
+        floor_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'floor.png')))
+        floor = imageio.imread(floor_filename)
 
-    player_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'player.png')))
-    player = imageio.imread(player_filename)
+        player_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'player.png')))
+        player = imageio.imread(player_filename)
 
-    player_on_target_filename = pkg_resources.resource_filename(resource_package,
-                                                                '/'.join(('surface', 'player_on_target.png')))
-    player_on_target = imageio.imread(player_on_target_filename)
+        player_on_target_filename = pkg_resources.resource_filename(resource_package,
+                                                                    '/'.join(('surface', 'player_on_target.png')))
+        player_on_target = imageio.imread(player_on_target_filename)
 
-    wall_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'wall.png')))
-    wall = imageio.imread(wall_filename)
+        wall_filename = pkg_resources.resource_filename(resource_package, '/'.join(('surface', 'wall.png')))
+        wall = imageio.imread(wall_filename)
 
     surfaces = [wall, floor, box_target, box_on_target, box, player, player_on_target]
 
